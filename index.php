@@ -58,6 +58,15 @@ html, body {
   --light-gray: #f5f5f5;
   --transition: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, #ff6b35 100%);
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
 }
 
 /* ========================
@@ -95,13 +104,14 @@ html, body {
 /* Modern Swipe Animations */
 .swiper-slide > * {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.95) translateY(20px);
   transition: all 1.2s var(--ease-out-expo);
+  will-change: transform, opacity;
 }
 
 .swiper-slide-active > * {
   opacity: 1;
-  transform: scale(1);
+  transform: scale(1) translateY(0);
 }
 
 /* Content animations */
@@ -163,6 +173,8 @@ html, body {
   opacity: 1;
   transition: all 0.4s var(--ease-out-expo);
   margin: 8px 0 !important;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-light);
 }
 
 .swiper-pagination-bullet::before {
@@ -232,12 +244,13 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000;
+  background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.8s var(--ease-out-expo);
+  backdrop-filter: blur(20px);
 }
 
 .loading-screen.loaded {
@@ -257,7 +270,8 @@ html, body {
   color: #fff;
   letter-spacing: 0.3em;
   opacity: 0;
-  animation: fadeInOut 2s ease infinite;
+  animation: fadeInOut 2s var(--ease-in-out-quart) infinite;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 .loading-bar {
@@ -548,7 +562,8 @@ html, body {
   height: 100%;
   object-fit: cover;
   transform: scale(1.1);
-  animation: heroScale 20s ease infinite alternate;
+  animation: heroScale 20s var(--ease-in-out-quart) infinite alternate;
+  will-change: transform;
 }
 
 @keyframes heroScale {
@@ -563,8 +578,9 @@ html, body {
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, 
-    rgba(0,0,0,0.3) 0%, 
-    rgba(0,0,0,0.5) 100%);
+    rgba(0,0,0,0.2) 0%, 
+    rgba(0,0,0,0.6) 100%);
+  backdrop-filter: blur(1px);
 }
 
 .hero-content {
@@ -748,16 +764,26 @@ html, body {
 
 .skypool-badge {
   display: inline-block;
-  padding: 6px 20px;
-  background: transparent;
-  border: 1px solid var(--secondary);
+  padding: 8px 24px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   color: var(--secondary);
   font-size: 0.7rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.15em;
   margin-bottom: 20px;
-  border-radius: 3px;
+  border-radius: 25px;
   text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-light);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.skypool-badge:hover {
+  background: var(--secondary);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
 }
 
 .skypool-title {
@@ -806,9 +832,15 @@ html, body {
 .skypool-image {
   position: relative;
   height: 500px;
-  border-radius: 12px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow-heavy);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.skypool-image:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
 }
 
 .skypool-image img {
@@ -821,11 +853,15 @@ html, body {
   position: absolute;
   bottom: 30px;
   left: 30px;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--glass-bg);
   padding: 15px 30px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 15px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-medium);
+  font-weight: 500;
+  letter-spacing: 0.05em;
 }
 
 .skypool-cta {
@@ -854,12 +890,15 @@ html, body {
 }
 
 .gourmet-buttons .btn-primary {
-  background: var(--secondary);
+  background: var(--gradient-secondary);
   color: #fff;
-  border: 2px solid var(--secondary);
+  border: 2px solid transparent;
   font-weight: 600;
   padding: 20px 40px;
   font-size: 1.1rem;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .gourmet-buttons .btn-primary::before {
@@ -885,12 +924,15 @@ html, body {
 }
 
 .gourmet-buttons .btn-secondary {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
   color: var(--primary);
   border: 2px solid var(--primary);
   font-weight: 600;
   padding: 20px 40px;
   font-size: 1.1rem;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(10px);
 }
 
 .gourmet-buttons .btn-secondary::after {
@@ -1000,14 +1042,16 @@ html, body {
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.4s var(--ease-out-expo);
+  border-radius: 15px;
+  box-shadow: var(--shadow-light);
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .cuisine-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-heavy);
 }
 
 .cuisine-image {
@@ -1061,8 +1105,11 @@ html, body {
   gap: 40px;
   margin-top: 50px;
   padding: 40px;
-  background: rgba(0,0,0,0.03);
-  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: var(--shadow-light);
 }
 
 .buffet-time,
@@ -1259,6 +1306,8 @@ html, body {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s var(--ease-out-expo);
 }
 
 .gallery-item:nth-child(1) {
@@ -1287,7 +1336,8 @@ html, body {
 }
 
 .gallery-item:hover img {
-  transform: scale(1.05);
+  transform: scale(1.08);
+  filter: brightness(1.1) contrast(1.1);
 }
 
 .gallery-caption {
@@ -1395,13 +1445,18 @@ html, body {
   font-size: 1.1rem;
   font-weight: 500;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.4s var(--ease-out-expo);
   letter-spacing: 0.05em;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
 }
 
 .btn-primary {
-  background: #fff;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
   color: var(--primary);
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
 .btn-primary:hover {
@@ -1411,9 +1466,10 @@ html, body {
 }
 
 .btn-secondary {
-  background: transparent;
+  background: var(--glass-bg);
   color: #fff;
-  border: 2px solid #fff;
+  border: 2px solid var(--glass-border);
+  backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
@@ -2116,17 +2172,17 @@ html, body {
   <div class="header-inner">
     <a href="<?php echo LOCATION; ?>" class="logo"></a>
     
-    <div class="nav-toggle" id="navToggle">
+    <button class="nav-toggle" id="navToggle" aria-label="メニューを開く" aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
-    </div>
+    </button>
   </div>
 </header>
 
 <!-- Fixed Booking Button -->
 <div class="fixed-booking-btn">
-  <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans?dateUndecidedFlg=1" target="_blank" class="booking-float-btn">
+  <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans?dateUndecidedFlg=1" target="_blank" class="booking-float-btn" rel="noopener" aria-label="予約サイトへ">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
       <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -2139,26 +2195,26 @@ html, body {
 </div>
 
 <!-- Navigation Menu -->
-<nav class="nav-menu" id="navMenu">
+<nav class="nav-menu" id="navMenu" role="navigation" aria-label="メインメニュー">
   <div class="nav-content">
-    <ul class="nav-list">
+    <ul class="nav-list" role="menubar">
       <li class="nav-item">
-        <a href="#" class="nav-link" style="--i: 1">TOP</a>
+        <a href="#" class="nav-link" style="--i: 1" role="menuitem">TOP</a>
       </li>
       <li class="nav-item">
-        <a href="#skypool" class="nav-link" style="--i: 2">SKYPOOL</a>
+        <a href="#skypool" class="nav-link" style="--i: 2" role="menuitem">SKYPOOL</a>
       </li>
       <li class="nav-item">
-        <a href="#gourmet" class="nav-link" style="--i: 3">GOURMET</a>
+        <a href="#gourmet" class="nav-link" style="--i: 3" role="menuitem">GOURMET</a>
       </li>
       <li class="nav-item">
-        <a href="#activities" class="nav-link" style="--i: 4">ACTIVITIES</a>
+        <a href="#activities" class="nav-link" style="--i: 4" role="menuitem">ACTIVITIES</a>
       </li>
       <li class="nav-item">
-        <a href="#gallery" class="nav-link" style="--i: 5">GALLERY</a>
+        <a href="#gallery" class="nav-link" style="--i: 5" role="menuitem">GALLERY</a>
       </li>
       <li class="nav-item">
-        <a href="#booking" class="nav-link" style="--i: 6">BOOKING</a>
+        <a href="#booking" class="nav-link" style="--i: 6" role="menuitem">BOOKING</a>
       </li>
     </ul>
   </div>
@@ -2207,16 +2263,16 @@ html, body {
         <div class="skypool-wrapper">
           <div class="skypool-content">
             <div class="skypool-text">
-              <div class="skypool-badge">Renewal</div>
-              <h2 class="skypool-title">Sky Pool</h2>
-              <p class="skypool-subtitle">2025.6.28 OPEN</p>
-              <p class="skypool-desc">
+              <div class="skypool-badge" data-reveal>Renewal</div>
+              <h2 class="skypool-title" data-reveal>Sky Pool</h2>
+              <p class="skypool-subtitle" data-reveal>2025.6.28 OPEN</p>
+              <p class="skypool-desc" data-reveal>
                 ルーフトップテラスのスカイプールをリニューアル<br>
                 インフィニティチェアのレンタルもスタート<br>
                 空と湖が一体化する360°パノラマビューのなか、<br>
                 リラックスした休日をお過ごしください。
               </p>
-              <div class="skypool-features">
+              <div class="skypool-features" data-reveal>
                 <div class="feature-item">
                   <div class="feature-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -2266,13 +2322,13 @@ html, body {
               </div>
             </div>
             
-            <div class="skypool-image">
-              <img src="images/skypool-main.jpg" alt="スカイプール">
+            <div class="skypool-image" data-reveal>
+              <img src="images/skypool-main.jpg" alt="スカイプール" loading="lazy">
             </div>
           </div>
           
-          <div class="skypool-cta">
-            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans/10166447/dateUndecidedFlg=1" target="_blank" class="btn btn-primary">夏休みプランはこちら</a>
+          <div class="skypool-cta" data-reveal>
+            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans/10166447/dateUndecidedFlg=1" target="_blank" class="btn btn-primary" rel="noopener">夏休みプランはこちら</a>
           </div>
         </div>
       </div>
@@ -2282,13 +2338,13 @@ html, body {
     <div class="swiper-slide slide-gourmet">
       <div class="gourmet-container">
         <div class="gourmet-content">
-          <h2 class="gourmet-title">夏のビュッフェメニューピックアップ</h2>
-          <p class="gourmet-subtitle">滋養豊かな夏料理と、食欲をそそる夏彩の涼味。</p>
+          <h2 class="gourmet-title" data-reveal>夏のビュッフェメニューピックアップ</h2>
+          <p class="gourmet-subtitle" data-reveal>滋養豊かな夏料理と、食欲をそそる夏彩の涼味。</p>
           
-          <div class="cuisine-grid">
+          <div class="cuisine-grid" data-reveal>
             <div class="cuisine-card" style="--i: 1">
               <div class="cuisine-image">
-                <img src="images/korean-pork.jpg" alt="地元銘柄豚のサムギョプサル">
+                <img src="images/korean-pork.jpg" alt="地元銘柄豚のサムギョプサル" loading="lazy">
               </div>
               <div class="cuisine-info">
                 <h3 class="cuisine-name">韓国フェア</h3>
@@ -2298,7 +2354,7 @@ html, body {
             
             <div class="cuisine-card" style="--i: 2">
               <div class="cuisine-image">
-                <img src="images/seafood-vegetables.jpg" alt="夏野菜と地魚のオーブン焼き">
+                <img src="images/seafood-vegetables.jpg" alt="夏野菜と地魚のオーブン焼き" loading="lazy">
               </div>
               <div class="cuisine-info">
                 <h3 class="cuisine-name">地元の恵み</h3>
@@ -2308,7 +2364,7 @@ html, body {
             
             <div class="cuisine-card" style="--i: 3">
               <div class="cuisine-image">
-                <img src="images/somen-pasta.jpg" alt="浜松そうめんの静岡茶ッペリーニ">
+                <img src="images/somen-pasta.jpg" alt="浜松そうめんの静岡茶ッペリーニ" loading="lazy">
               </div>
               <div class="cuisine-info">
                 <h3 class="cuisine-name">創作料理</h3>
@@ -2367,9 +2423,9 @@ html, body {
             </div>
           </div>
           
-          <div class="gourmet-buttons">
-            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans/10136336/dateUndecidedFlg=1" target="_blank" class="btn btn-primary">夕・朝ビュッフェ付きプランはこちら</a>
-            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans/10114160/dateUndecidedFlg=1" target="_blank" class="btn btn-secondary">地魚のお造り七点盛り付きプランはこちら</a>
+          <div class="gourmet-buttons" data-reveal>
+            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans/10136336/dateUndecidedFlg=1" target="_blank" class="btn btn-primary" rel="noopener">夕・朝ビュッフェ付きプランはこちら</a>
+            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans/10114160/dateUndecidedFlg=1" target="_blank" class="btn btn-secondary" rel="noopener">地魚のお造り七点盛り付きプランはこちら</a>
           </div>
         </div>
       </div>
@@ -2379,7 +2435,7 @@ html, body {
     <div class="swiper-slide slide-activities">
       <div class="activities-container">
         <div class="activities-header">
-          <h2 class="activities-title">夏のアクティビティー</h2>
+          <h2 class="activities-title" data-reveal>夏のアクティビティー</h2>
         </div>
         <div class="activities-bg">
           <div class="activity-panel">
@@ -2478,7 +2534,7 @@ html, body {
         </div>
         
         <div class="gallery-center-text">
-          <h2 class="gallery-title">Gallery</h2>
+          <h2 class="gallery-title" data-reveal>Gallery</h2>
         </div>
       </div>
     </div>
@@ -2487,7 +2543,7 @@ html, body {
     <div class="swiper-slide slide-booking">
       <div class="booking-container">
         <div class="booking-content">
-          <h2 class="booking-title">
+          <h2 class="booking-title" data-reveal>
             お得な直予約特典
           </h2>
           
@@ -2502,8 +2558,8 @@ html, body {
             </div>
           </div>
           
-          <div class="booking-buttons">
-            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans?dateUndecidedFlg=1" target="_blank" class="btn btn-primary">直予約サイトで予約</a>
+          <div class="booking-buttons" data-reveal>
+            <a href="https://go-listel.reservation.jp/ja/hotels/listel-hamanako/plans?dateUndecidedFlg=1" target="_blank" class="btn btn-primary" rel="noopener">直予約サイトで予約</a>
             <a href="tel:0535251222" class="btn btn-secondary">電話で予約</a>
           </div>
           
@@ -2766,6 +2822,66 @@ window.addEventListener('mousemove', (e) => {
   
   heroBg.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
 });
+
+// Add CSS for reveal animations
+const revealStyles = `
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  [data-reveal].revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .slide-transitioning * {
+    pointer-events: none;
+  }
+  
+  .swiper-loaded .swiper-slide-active .animate-in {
+    animation-delay: 0.3s;
+  }
+`;
+
+const styleSheet = document.createElement('style');
+styleSheet.textContent = revealStyles;
+document.head.appendChild(styleSheet);
+
+// Add focus trap for better accessibility
+function trapFocus(element) {
+  const focusableElements = element.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  
+  if (focusableElements.length === 0) return;
+  
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+  
+  element.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    }
+  });
+}
+
+// Apply focus trap to navigation menu
+const navMenu = document.getElementById('navMenu');
+if (navMenu) {
+  trapFocus(navMenu);
+}
 </script>
 
 </body>
